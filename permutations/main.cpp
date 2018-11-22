@@ -21,10 +21,9 @@ std::unordered_set<std::string> permutations(std::string in, char c) {
 
   std::unordered_set<std::string> results;
   for(auto item: permutations(in.substr(0, in.length() - 1), in[in.length() -1])) {
-    for(int i = 0; i < item.length(); i++) {
+    for(int i = 0; i <= item.length(); i++) {
       results.insert(item.substr(0,i) + c + item.substr(i));
     }
-    results.insert(item + c);
   }
 
   return results;
