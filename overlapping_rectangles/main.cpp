@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 struct Point {
   Point(int x, int y): X(x), Y(y) {
@@ -6,24 +7,6 @@ struct Point {
 
   int X;
   int Y;
-};
-
-enum class Orientation {
-  HORIZONTAL,
-  VERTICAL
-};
-
-struct Edge {
-
-  Edge(const Point& p1, const Point& p2):
-    start(p1),
-    end(p2) {
-    if(p1.X == p2.X) orientation = Orientation::HORIZONTAL;
-    else if(p1.Y == p2.Y) orientation = Orientation::VERTICAL;
-  }
-  Point start;
-  Point end;
-  Orientation orientation;
 };
 
 struct Rectangle {
@@ -34,42 +17,26 @@ struct Rectangle {
 
   Point bottom_left; 
   Point top_right;
-
-  Edge get_bottom_edge() {
-    return Edge(bottom_left, Point{top_right.X, bottom_left.Y});
-  }
-
-  Edge get_top_edge() {
-    return Edge(Point{bottom_left.X, top_right.Y}, top_right);
-  }
-
-  Edge get_left_edge() {
-    int x = bottom_left.X;
-    return Edge(Point{x, bottom_left.Y}, Point{x, top_right.Y});
-  }
-  Edge get_right_edge() {
-    int x = top_right.X;
-    return Edge(Point{x, bottom_left.Y}, Point{x, top_right.Y});
-  }
 };
 
-Point cutting_edges(const Edge& e1, const Edge& e2) {
-  if(e1.orientation == e2.orientation) {
-    if(e1.orientation == Orientation.HORIZONTAL) {
-      if(e1.start.X <= e2.start.X && e1.end.X >= e2.start.X
-      || e2.start.X <= e1.start.Y && e2.end.X >= e1.start.X) {
-        return Point{ 
-      }
-    }
-  }
-  return true;
-}
-
 int overlapping_area(const Rectangle& r1, const Rectangle& r2) {
-  
+  int starting_x = std::max(r1.bottom_left.X, r2.bottom_left.X);
+  int finish_x = std::min(r1.top_right.X, r2.top_right.X);
+  int length_x = finish_x - starting_x;
+  if(length_x < 0) return -1;
+
+  int starting_y = std::max(r1.bottom_left.Y, r2.bottom_left.Y);
+  int finish_y = std::min(r1.top_right.Y, r2.top_right.Y);
+  int height_y = (finish_y - starting_y);
+  if(height_y < 0) return -1;
+
+  return length_x * height_y;
 }
 
 int main(int argc, char** argv) {
-  
+  Rectangle r1{Point{2,1}, Point{5,5}}; 
+  Rectangle r2{Point{3,2}, Point{5,7}}; 
+  std::cout << "Overlapping area: " << overlapping_area(r1, r2) << std::endl;
+
   return 0;
 }
