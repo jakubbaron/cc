@@ -1,19 +1,20 @@
 #include <iostream>
 #include <queue>
+#include <memory>
 
 struct BinaryTree {
   BinaryTree(int val): value(val) {
-    left = 0;
-    right = 0;   
+    left = nullptr;
+    right = nullptr;   
   }
 
-  BinaryTree *left;
-  BinaryTree *right;
+  std::shared_ptr<BinaryTree> left;
+  std::shared_ptr<BinaryTree> right;
   int value;
 };
 
-using level_tree_pair = std::pair<int, BinaryTree*>;
-void print_levels(BinaryTree* root) {
+using level_tree_pair = std::pair<int, std::shared_ptr<BinaryTree> >;
+void print_levels(std::shared_ptr<BinaryTree> root) {
   static std::queue<level_tree_pair> q;
   int current_level = 1;
   if(root == nullptr) return;
@@ -41,13 +42,13 @@ void print_levels(BinaryTree* root) {
 
 
 int main(int argc, char** argv) {
-  BinaryTree *bt = new BinaryTree{5};
-  bt->left = new BinaryTree{3};
-  bt->right  = new BinaryTree{8};
-  bt->right->right = new BinaryTree{13};
-  bt->right->left= new BinaryTree{53};
-  bt->left->left= new BinaryTree{10};
-  bt->left->right= new BinaryTree{20};
+  auto bt = std::make_shared<BinaryTree>(5);
+  bt->left = std::make_shared<BinaryTree>(3);
+  bt->right  = std::make_shared<BinaryTree>(8);
+  bt->right->right = std::make_shared<BinaryTree>(13);
+  bt->right->left= std::make_shared<BinaryTree>(53);
+  bt->left->left= std::make_shared<BinaryTree>(10);
+  bt->left->right= std::make_shared<BinaryTree>(20);
 
   print_levels(bt);
 
