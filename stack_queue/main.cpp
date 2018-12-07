@@ -2,39 +2,78 @@
 #include <stack>
 
 template<class T>
-T dequeue_from_stack(std::stack<T>& s) {
-  if(s.size() == 1) {
-    T val = s.top();
-    s.pop();
-    return val;
-  }
-  T curr_val = s.top();
-  s.pop();
-  auto result = dequeue_from_stack(s);
-  s.push(curr_val);
+class QueueStack {
+  public:
+    T dequeue() {
+      if(s.size() == 1) {
+        T val = s.top();
+        s.pop();
+        return val;
+      }
+      T curr_val = s.top();
+      s.pop();
+      auto result = dequeue();
+      s.push(curr_val);
 
-  return result;
-}
+      return result;
+    }
+    void enqueue(T val) {
+      s.push(val);
+    }
+    bool empty() const {
+      return s.empty();
+    }
+
+  private:
+    std::stack<T> s;
+};
+
+template<class T>
+class QueueTwoStacks {
+  public:
+    T dequeue() {
+      if(!dequeue_s.empty()) {
+        T val = dequeue_s.top();
+        dequeue_s.pop();
+        return val;
+      }
+      while(!enqueue_s.empty()) { 
+        T val = enqueue_s.top();
+        enqueue_s.pop();
+        dequeue_s.push(val);
+      }
+      return dequeue();
+    }
+
+    void enqueue(T val) {
+      enqueue_s.push(val);
+    }
+    bool empty() const {
+      return enqueue_s.empty() && dequeue_s.empty();
+    }
+
+  private:
+    std::stack<T> enqueue_s;
+    std::stack<T> dequeue_s;
+};
 
 
 int main(int argc, char** argv) {
-  std::stack<int> s;
+  QueueStack<int> qs;
+  QueueTwoStacks<int> q2s;
   for(int i=0;i<10;i++) {
-    s.push(i);
-  }
-  std::cout << "Elements in stack: " << std::endl;
-  while(!s.empty()) {
-    std::cout << s.top() << std::endl;
-    s.pop();
+    qs.enqueue(i);
+    q2s.enqueue(i);
   }
 
-  for(int i=0;i<10;i++) {
-    s.push(i);
+  std::cout << "Dequeueing 1 Stack Queue:" << std::endl;
+  while(!qs.empty()) {
+    std::cout << qs.dequeue() << std::endl;
   }
 
-  std::cout << "Dequeueing:" << std::endl;
-  while(!s.empty()) {
-    std::cout << dequeue_from_stack(s) << std::endl;
+  std::cout << "Dequeueing 2 Stacks Queue:" << std::endl;
+  while(!q2s.empty()) {
+    std::cout << q2s.dequeue() << std::endl;
   }
   return 0;
 }
