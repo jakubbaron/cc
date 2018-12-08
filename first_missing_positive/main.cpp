@@ -30,7 +30,7 @@ auto first_missing_positive(int* arr, size_t arr_size) {
 }
 
 int main(int argc, char** argv) {
-  int arr[] = {5,4,1,2,7,5};
+  int arr[] = {5,4,1,2,7,-5};
   constexpr auto arr_size = sizeof(arr)/sizeof(arr[0]);
   std::cout << "First missing positive: " << first_missing_positive(arr, arr_size) << std::endl;
   return 0;
