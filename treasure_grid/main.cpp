@@ -41,21 +41,22 @@ class Treasures {
 
     auto max_treasure() {
       init_cache();
-      for(int col = m_size - 1; col >= 0; col--) {
-        for(int row = m_size - 1; row >= 0; row--) {
+      for(int col = 0; col < m_size; col++) {
+        for(int row = 0; row < m_size; row++) {
           int prev_max_in_row{0};
           int prev_max_in_col{0};
-          if(row + 1 < m_size) {
-            prev_max_in_col = m_cache[row + 1][col];
+          if(row - 1 >= 0) {
+            prev_max_in_col = m_cache[row - 1][col];
           }
-          if(col + 1 < m_size) {
-            prev_max_in_row = m_cache[row][col + 1];
+          if(col - 1 >= 0) {
+            prev_max_in_row = m_cache[row][col - 1];
           }
           m_cache[row][col] = m_treasures[row][col] + std::max({prev_max_in_col, prev_max_in_row});
         }
       }
+
       print_cache();
-      auto result = m_cache[0][0];
+      auto result = m_cache[m_size-1][m_size-1];
       remove_cache();
       return result;
     }
