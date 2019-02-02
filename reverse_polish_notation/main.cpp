@@ -4,6 +4,9 @@
 
 auto calculate(const std::string& input) noexcept -> double {
   double result = 0.0;
+  for(const auto& c: input) {
+    
+  }
   return result;
 }
 
