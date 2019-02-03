@@ -1,4 +1,4 @@
-TARGET ?= a.out
+TARGET ?= main.out
 SRC_DIRS ?= ./
 
 SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
@@ -8,7 +8,7 @@ DEPS := $(OBJS:.o=.d)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -g -Wall -MMD -std=c++14
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -g -Wall -MMD -std=c++17 -O2
 
 CXX = /usr/bin/clang++
 $(TARGET): $(OBJS)
